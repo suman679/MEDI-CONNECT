@@ -1,0 +1,96 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;1,9..144,300&display=swap');
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --teal:         #0D7F6E;
+  --teal-light:   #E6F5F2;
+  --teal-mid:     #4BBFAA;
+  --teal-dark:    #095C4F;
+  --navy:         #0E2340;
+  --navy-mid:     #1A3A5C;
+  --slate:        #4A6278;
+  --cream:        #FAF8F4;
+  --white:        #FFFFFF;
+  --amber:        #E8A020;
+  --amber-light:  #FEF3DC;
+  --red:          #D94040;
+  --red-light:    #FDEAEA;
+  --green:        #2E9B6A;
+  --green-light:  #E8F7F1;
+  --border:       #E2EAF0;
+  --border-dark:  #C8D8E4;
+  --text:         #0E2340;
+  --text-mid:     #4A6278;
+  --text-light:   #8AA0B4;
+  --shadow:       0 2px 12px rgba(14, 35, 64, 0.08);
+  --shadow-lg:    0 8px 32px rgba(14, 35, 64, 0.12);
+  --r:            12px;
+  --r-sm:         8px;
+  --r-lg:         20px;
+}
+
+html { font-size: 14px; }
+
+body {
+  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--cream);
+  color: var(--text);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4 {
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 300;
+  line-height: 1.2;
+}
+
+a { color: inherit; }
+
+button, input, select, textarea {
+  font-family: inherit;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-dark); border-radius: 10px; }
+
+/* Page transition */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.page-fade { animation: fadeIn 0.25s ease; }
+
+/* Spinner */
+.spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid var(--border);
+  border-top-color: var(--teal);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Input focus */
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--teal) !important;
+  background: var(--white) !important;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  body { font-size: 13px; }
+}

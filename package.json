@@ -1,0 +1,14 @@
+{
+  "name": "mediconnect",
+  "version": "1.0.0",
+  "description": "Full-stack MERN Telemedicine Platform",
+  "scripts": {
+    "install:all": "npm install --prefix backend && npm install --legacy-peer-deps --prefix frontend",
+    "seed": "npm run --prefix backend seed",
+    "dev:backend": "npm run dev --prefix backend",
+    "dev:frontend": "npm start --prefix frontend",
+    "build": "npm run build --prefix frontend",
+    "docker:up": "docker-compose up --build",
+    "docker:down": "docker-compose down"
+  }
+}
