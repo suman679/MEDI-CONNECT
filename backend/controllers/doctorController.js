@@ -59,6 +59,48 @@ exports.getDoctorStats = async (req, res, next) => {
   } catch (err) { next(err); }
 };
 
+// GET /api/doctors/:id
+exports.getDoctor = async (req,res,next)=>{
+
+try{
+
+const doctor =
+await Doctor.findById(
+req.params.id
+)
+.populate(
+'user',
+'name email avatar gender phone'
+);
+
+if(!doctor){
+
+return res.status(404).json({
+
+success:false,
+
+message:'Doctor not found'
+
+});
+
+}
+
+res.json({
+
+success:true,
+
+data:doctor
+
+});
+
+}catch(err){
+
+next(err);
+
+}
+
+};
+
 // GET /api/doctors/
 exports.getDoctors =
 async(req,res,next)=>{
