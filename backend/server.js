@@ -12,7 +12,7 @@ const errorHandler = require('./middleware/errorHandler');
 connectDB();
 
 const app    = express();
-app.set('trust proxy', 1);
+app.set('trust proxy', true);
 const server = http.createServer(app);
 
 // ── Socket.io ──────────────────────────────────────────────────────────────
