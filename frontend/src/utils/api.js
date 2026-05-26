@@ -6,7 +6,7 @@ baseURL: `${process.env.REACT_APP_API_URL}/api` || 'http://localhost:5000/api',
 });
 
 API.interceptors.request.use((config) => {
-  const token = localStorage.getItem('mc_token');
+  const token = sessionStorage.getItem('mc_token');
   if (token) config.headers.Authorization = `Bearer ${token}`;
   return config;
 });
@@ -15,8 +15,8 @@ API.interceptors.response.use(
   (res) => res,
   (err) => {
     if (err.response?.status === 401) {
-      localStorage.removeItem('mc_token');
-      localStorage.removeItem('mc_user');
+      sessionStorage.removeItem('mc_token');
+      sessionStorage.removeItem('mc_user');
       if (!window.location.pathname.includes('/login')) window.location.href = '/login';
     }
     return Promise.reject(err.response?.data || { message: err.message || 'Network error' });

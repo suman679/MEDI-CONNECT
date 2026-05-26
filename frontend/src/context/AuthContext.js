@@ -9,13 +9,13 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token  = localStorage.getItem('mc_token');
-    const stored = localStorage.getItem('mc_user');
+    const token  = sessionStorage.getItem('mc_token');
+    const stored = sessionStorage.getItem('mc_user');
     if (token && stored) {
       try { setUser(JSON.parse(stored)); } catch(_) {}
       authAPI.getMe()
         .then(({ data }) => setUser(data.data?.user || data.user))
-        .catch(() => { localStorage.removeItem('mc_token'); localStorage.removeItem('mc_user'); setUser(null); })
+        .catch(() => { sessionStorage.removeItem('mc_token'); sessionStorage.removeItem('mc_user'); setUser(null); })
         .finally(() => setLoading(false));
     } else {
       setLoading(false);
@@ -24,8 +24,8 @@ export const AuthProvider = ({ children }) => {
 
   const login = useCallback(async (email, password) => {
     const { data } = await authAPI.login({ email, password });
-    localStorage.setItem('mc_token', data.token);
-    localStorage.setItem('mc_user', JSON.stringify(data.user));
+    sessionStorage.setItem('mc_token', data.token);
+    sessionStorage.setItem('mc_user', JSON.stringify(data.user));
     setUser(data.user);
     toast.success(`Welcome back, ${data.user.name.split(' ')[0]}!`);
     return data.user;
@@ -33,8 +33,8 @@ export const AuthProvider = ({ children }) => {
 
   const register = useCallback(async (formData) => {
     const { data } = await authAPI.register(formData);
-    localStorage.setItem('mc_token', data.token);
-    localStorage.setItem('mc_user', JSON.stringify(data.user));
+    sessionStorage.setItem('mc_token', data.token);
+    sessionStorage.setItem('mc_user', JSON.stringify(data.user));
     setUser(data.user);
     toast.success('Account created successfully!');
     return data.user;
@@ -42,8 +42,8 @@ export const AuthProvider = ({ children }) => {
 
   const logout = useCallback(async () => {
     try { await authAPI.logout(); } catch(_) {}
-    localStorage.removeItem('mc_token');
-    localStorage.removeItem('mc_user');
+    sessionStorage.removeItem('mc_token');
+    sessionStorage.removeItem('mc_user');
     setUser(null);
     toast.success('Logged out successfully');
   }, []);
@@ -51,7 +51,7 @@ export const AuthProvider = ({ children }) => {
   const updateUser = useCallback((updates) => {
     setUser(prev => {
       const u = { ...prev, ...updates };
-      localStorage.setItem('mc_user', JSON.stringify(u));
+      sessionStorage.setItem('mc_user', JSON.stringify(u));
       return u;
     });
   }, []);

@@ -15,7 +15,7 @@ export const SocketProvider = ({ children }) => {
     if (!isAuthenticated || !user) return;
 
     const socket = io(process.env.REACT_APP_SOCKET_URL || 'http://localhost:5000', {
-      auth: { token: localStorage.getItem('mc_token') },
+      auth: { token: sessionStorage.getItem('mc_token') },
       transports: ['websocket','polling'],
       reconnectionAttempts: 5,
     });
