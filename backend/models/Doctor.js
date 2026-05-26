@@ -23,7 +23,7 @@ const doctorSchema = new mongoose.Schema({
     saturday:  { available: { type: Boolean, default: true  }, startTime: { type: String, default: '10:00' }, endTime: { type: String, default: '14:00' } },
     sunday:    { available: { type: Boolean, default: false }, startTime: { type: String, default: '00:00' }, endTime: { type: String, default: '00:00' } },
   },
-  isApproved:      { type: Boolean, default: false },
+  isApproved:      { type: Boolean, default: true },
   isAvailableNow:  { type: Boolean, default: false },
 }, { timestamps: true });
 
