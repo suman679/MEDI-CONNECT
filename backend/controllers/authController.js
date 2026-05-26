@@ -6,34 +6,58 @@ const Notification = require('../models/Notification');
 
 // ───────────────── Helper: Send Cookie Response ─────────────────
 
-const sendToken = (user, statusCode, res, doctorProfile=null) => {
+const sendToken = (
+user,
+statusCode,
+res,
+doctorProfile=null
+)=>{
 
-  const token = generateToken(user._id, user.role);
+const token =
+generateToken(
+user._id,
+user.role
+);
 
-  res.cookie('mc_token', token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite:
-      process.env.NODE_ENV === 'production'
-        ? 'none'
-        : 'lax',
-    maxAge: 30 * 24 * 60 * 60 * 1000
-  });
+res.cookie(
+'mc_token',
+token,
+{
+httpOnly:true,
 
-  res.status(statusCode).json({
-    success:true,
+secure:
+process.env.NODE_ENV
+=== 'production',
 
-    user:{
-      _id:user._id,
-      name:user.name,
-      email:user.email,
-      role:user.role,
-      avatar:user.avatar,
-      isVerified:user.isVerified
-    },
+sameSite:
+process.env.NODE_ENV
+=== 'production'
+? 'none'
+: 'lax',
 
-    doctorProfile
-  });
+maxAge:
+30*24*60*60*1000
+}
+);
+
+res.status(statusCode)
+.json({
+
+success:true,
+
+user:{
+_id:user._id,
+name:user.name,
+email:user.email,
+role:user.role,
+avatar:user.avatar,
+isVerified:user.isVerified
+},
+
+doctorProfile
+
+});
+
 };
 
 

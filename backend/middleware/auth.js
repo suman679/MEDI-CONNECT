@@ -1,77 +1,143 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
-exports.protect = async (req, res, next) => {
+exports.protect = async (req,res,next)=>{
 
-  let token;
+let token;
 
-  // Cookie auth + Bearer fallback
-  if (req.cookies && req.cookies.mc_token) {
-    token = req.cookies.mc_token;
-  }
-  else if (
-    req.headers.authorization &&
-    req.headers.authorization.startsWith('Bearer')
-  ) {
-    token = req.headers.authorization.split(' ')[1];
-  }
+if(
+req.cookies &&
+req.cookies.mc_token
+){
+token =
+req.cookies.mc_token;
+}
 
-  if (!token) {
-    return res.status(401).json({
-      success:false,
-      message:'Not authorized, no token'
-    });
-  }
+else if(
+req.headers.authorization &&
+req.headers.authorization
+.startsWith('Bearer')
+){
 
-  try {
+token =
+req.headers.authorization
+.split(' ')[1];
 
-    const decoded = jwt.verify(
-      token,
-      process.env.JWT_SECRET || 'mediconnect_secret_key_2026'
-    );
+}
 
-    req.user = await User
-      .findById(decoded.id)
-      .select('-password');
+if(!token){
 
-    if (!req.user) {
-      return res.status(401).json({
-        success:false,
-        message:'User not found'
-      });
-    }
+return res.status(401)
+.json({
 
-    if (!req.user.isActive) {
-      return res.status(401).json({
-        success:false,
-        message:'Account deactivated'
-      });
-    }
+success:false,
+message:
+'Not authorized, no token'
 
-    next();
+});
 
-  } catch (err) {
+}
 
-    return res.status(401).json({
-      success:false,
-      message:'Token invalid or expired'
-    });
+try{
 
-  }
+if(
+!process.env.JWT_SECRET
+){
+
+throw new Error(
+'JWT_SECRET missing'
+);
+
+}
+
+const decoded =
+jwt.verify(
+
+token,
+
+process.env.JWT_SECRET
+
+);
+
+req.user =
+await User
+.findById(decoded.id)
+.select('-password');
+
+if(!req.user){
+
+return res.status(401)
+.json({
+
+success:false,
+message:
+'User not found'
+
+});
+
+}
+
+if(!req.user.isActive){
+
+return res.status(401)
+.json({
+
+success:false,
+message:
+'Account deactivated'
+
+});
+
+}
+
+next();
+
+}catch(err){
+
+return res.status(401)
+.json({
+
+success:false,
+message:
+'Token invalid or expired'
+
+});
+
+}
+
 };
 
 
-exports.authorize = (...roles) => {
+exports.authorize =
+(...roles)=>{
 
-  return (req, res, next) => {
+return (
+req,
+res,
+next
+)=>{
 
-    if (!roles.includes(req.user.role)) {
-      return res.status(403).json({
-        success:false,
-        message:`Role '${req.user.role}' is not authorized`
-      });
-    }
+if(
+!roles.includes(
+req.user.role
+)
+){
 
-    next();
-  };
+return res
+.status(403)
+.json({
+
+success:false,
+
+message:
+`Role '${req.user.role}' is not authorized`
+
+});
+
+}
+
+next();
+
+};
+
 };

@@ -33,8 +33,38 @@ const allowedOrigins = [
 
 app.use(
   helmet({
+
     crossOriginEmbedderPolicy:false,
-    contentSecurityPolicy:false,
+
+    contentSecurityPolicy:{
+
+      directives:{
+
+        defaultSrc:["'self'"],
+
+        scriptSrc:[
+          "'self'",
+          "'unsafe-inline'"
+        ],
+
+        styleSrc:[
+          "'self'",
+          "'unsafe-inline'"
+        ],
+
+        imgSrc:[
+          "'self'",
+          "data:",
+          "https:"
+        ],
+
+        connectSrc:[
+          "'self'",
+          ...allowedOrigins
+        ]
+      }
+    },
+
     crossOriginResourcePolicy:{
       policy:'cross-origin'
     }
@@ -66,17 +96,39 @@ app.use(
 
 app.use(
   express.json({
-    limit:'10mb'
+    limit:'1mb'
   })
 );
 
 app.use(
   express.urlencoded({
-    extended:true
+    extended:true,
+    limit:'1mb'
   })
 );
 
 app.use(cookieParser());
+
+app.use((req,res,next)=>{
+
+res.setHeader(
+'X-Content-Type-Options',
+'nosniff'
+);
+
+res.setHeader(
+'X-Frame-Options',
+'DENY'
+);
+
+res.setHeader(
+'Referrer-Policy',
+'strict-origin-when-cross-origin'
+);
+
+next();
+
+});
 
 app.use(mongoSanitize());
 
@@ -92,12 +144,17 @@ if (
 
 // General API limiter
 
+// General API limiter
+
 const apiLimiter = rateLimit({
 
   windowMs:
     15 * 60 * 1000,
 
-  max:100,
+  max:
+    process.env.NODE_ENV === 'production'
+      ? 80
+      : 200,
 
   standardHeaders:true,
 
@@ -108,6 +165,7 @@ const apiLimiter = rateLimit({
     message:
       'Too many requests. Try again later.'
   }
+
 });
 
 
@@ -118,7 +176,7 @@ const authLimiter = rateLimit({
   windowMs:
     15 * 60 * 1000,
 
-  max:10,
+  max:5,
 
   skipSuccessfulRequests:true,
 
