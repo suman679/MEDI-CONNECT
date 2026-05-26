@@ -138,7 +138,11 @@ io.on('connection', (socket) => {
 
 app.use(
   helmet({
-    crossOriginEmbedderPolicy: false
+    crossOriginEmbedderPolicy:false,
+    contentSecurityPolicy:false,
+    crossOriginResourcePolicy:{
+      policy:'cross-origin'
+    }
   })
 );
 
